@@ -1,0 +1,5 @@
+ver age == 0
+n scale as dummies
+change NAs in first hearing date to -1 
+setup blueprint for model train (folds, scaling, model saving)
+review EDA
