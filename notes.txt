@@ -3,3 +3,22 @@ n scale as dummies
 change NAs in first hearing date to -1 
 setup blueprint for model train (folds, scaling, model saving)
 review EDA
+KNN imputer
+
+estruturar:
+
+ver dados (info descrip)
+tirar missing no target
+dups
+ver outliers e anomalidades
+ver outros missing
+
+criar novas features/ alterar atuais (birth year -> age) (first hearing data -> dias (NAs = -1 e) e occured (0 e 1))
+features encoding
+features selection (corr, RFM e lass) Chiqsquarres
+
+for dataset in [data, data_features_1, data_features_2]
+    for model in model_type (isto devia ser um dict com diferentes model(key), e os values seria mais dicts com model com diferentes parametros)
+        for fold in kfold
+
+        salvar models, param etc
