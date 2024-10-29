@@ -7,14 +7,18 @@ KNN imputer
 
 estruturar:
 
+1. EDA
 ver dados (info descrip)
 tirar missing no target
 dups
 ver outliers e anomalidades
 ver outros missing
-
 criar novas features/ alterar atuais (birth year -> age) (first hearing data -> dias (NAs = -1 e) e occured (0 e 1))
-features encoding
+features encoding 
+save data in csv 
+
+2. Train
+train_test_split de 10% para parte do dataset q n se vai tocar
 features selection (corr, RFM e lass) Chiqsquarres
 
 for dataset in [data, data_features_1, data_features_2]
@@ -22,3 +26,9 @@ for dataset in [data, data_features_1, data_features_2]
         for fold in kfold
 
         salvar models, param etc
+
+3.
+load data and model
+Preprocessing real_test
+predict test
+profit???
