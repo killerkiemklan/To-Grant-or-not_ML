@@ -73,5 +73,5 @@ def date_to_number(dataset:pd.DataFrame, features:list) -> None:
             dataset["Age"] = 2023 - dataset[feature]
         else:
             new_name = feature.replace("Date","Days")
-            dataset[new_name] = (reference_date - pd.to_datetime(dataset[feature], errors='coerce')).dt.days
+            dataset[new_name] = (reference_date - pd.to_datetime(dataset[feature], errors='coerce')).dt.days / 365.25
     return
