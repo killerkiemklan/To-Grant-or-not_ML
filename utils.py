@@ -62,7 +62,7 @@ def multiencoder(dataset:pd.DataFrame, features:list, encoder_type:str, encoders
 
 def gen_dummy(dataset:pd.DataFrame, features:list) -> None:
     for feature in features:
-        dataset[feature + "Occurred"] = dataset[feature].notna().astype(int)
+        dataset[feature + " Occurred"] = dataset[feature].notna().astype(int)
     return
 
 
