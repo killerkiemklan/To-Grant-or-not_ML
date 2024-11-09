@@ -66,12 +66,10 @@ def gen_dummy(dataset:pd.DataFrame, features:list) -> None:
     return
 
 
-def date_to_number(dataset:pd.DataFrame, features:list) -> None:
-    reference_date = pd.to_datetime("2023-01-01")
+def date_past_accident(dataset:pd.DataFrame, features:list) -> None:
     for feature in features:
-        if feature == "Birth Year":
-            dataset["Age"] = 2023 - dataset[feature]
-        else:
-            new_name = feature.replace("Date","Days")
-            dataset[new_name] = (reference_date - pd.to_datetime(dataset[feature], errors='coerce')).dt.days / 365.25
-    return
+        new_name = feature.replace("Date","")
+        new_name = new_name.replace(" ","")
+        dataset[f"{new_name} Years past Accident"] = (pd.to_datetime(dataset[feature], errors='coerce') - dataset["Accident Date"]).dt.days / 365.25
+
+
