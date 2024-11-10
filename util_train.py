@@ -13,18 +13,28 @@ from sklearn.impute import KNNImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.feature_selection import RFE
 
+from sklearn.model_selection import StratifiedKFold
 
 # embedded methods
 from sklearn.linear_model import LassoCV
-
-from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import classification_report, f1_score
-
 import scipy.stats as stats
 from scipy.stats import chi2_contingency
+
+from sklearn.preprocessing import LabelEncoder
+
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+
+from sklearn.metrics import classification_report, f1_score
+
+from util_train import *
+from utils import *
+import xgboost as xgb
+
 
 def TestIndependence(X,y,var,alpha=0.05):
     dfObserved = pd.crosstab(y,X)
@@ -80,3 +90,36 @@ def plot_importance(coef,name):
     imp_coef.plot(kind = "barh")
     plt.title("Feature importance using " + name + " Model")
     plt.show()
+
+
+
+def check_performace(model,X,y,features_to_scale,n_folds = 5):
+    
+    K_fold = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=42)
+
+    fold = 1
+
+    for train_index, val_index in K_fold.split(X, y):
+        X_train, X_val = X.iloc[train_index], X.iloc[val_index]
+        y_train, y_val = y.iloc[train_index], y.iloc[val_index]
+    
+        scaler = StandardScaler().fit(X_train[features_to_scale])
+        X_train[features_to_scale]  = scaler.transform(X_train[features_to_scale])
+        X_val[features_to_scale]  = scaler.transform(X_val[features_to_scale])  
+
+        to_impute = ["Average Weekly Wage","Industry Code"]
+        imputer = KNNImputer(n_neighbors=3)
+        X_train[to_impute] = imputer.fit_transform(X_train[to_impute])
+        X_val[to_impute] = imputer.transform(X_val[to_impute])
+
+        smote = SMOTE(random_state=42)
+        X_train, y_train = smote.fit_resample(X_train, y_train)    
+    
+        model.fit(X_train, y_train)
+    
+        # Model that can find classes with very low data
+
+        y_val_pred = model.predict(X_val)
+        f1 = f1_score(y_val, y_val_pred, average='macro')
+        print(f"Fold {fold} validation F1 score: {f1:.4f}")
+        fold += 1
